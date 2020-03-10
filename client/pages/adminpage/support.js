@@ -27,7 +27,7 @@ export class SupportPage extends React.Component {
                   </svg>
                   <strong>Bug & Feature request</strong>
                   <p>
-                    To report a bug or issue, open an issue on the <a href="http://github.com/mickael-kerjean/filestash">Github repo</a>.
+                    To report a bug or issue, open an issue on the <a href="http://github.com/icoma89/filestash">Github repo</a>.
                   </p>
                 </div>
                 <div>

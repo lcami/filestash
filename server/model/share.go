@@ -1,7 +1,7 @@
 package model
 
 import (
-	. "github.com/mickael-kerjean/filestash/server/common"
+	. "github.com/icoma89/filestash/server/common"
 	"bytes"
 	"crypto/tls"
 	"database/sql"
@@ -615,7 +615,7 @@ func TmplEmailVerification() string {
               <table border="0" cellpadding="0" cellspacing="0">
                 <tr>
                   <td class="content-block powered-by">
-                    Powered by <a href="http://github.com/mickael-kerjean/filestash">Filestash</a>.
+                    Powered by <a href="http://github.com/icoma89/filestash">Filestash</a>.
                   </td>
                 </tr>
               </table>

@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 	"time"
-	. "github.com/mickael-kerjean/filestash/server/common"
+	. "github.com/icoma89/filestash/server/common"
 	"github.com/gorilla/websocket"
 )
 

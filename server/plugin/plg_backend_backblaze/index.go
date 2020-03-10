@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"encoding/base64"
 	"fmt"
-	. "github.com/mickael-kerjean/filestash/server/common"
+	. "github.com/icoma89/filestash/server/common"
 	"io"
 	"io/ioutil"
 	"net/http"

@@ -1,7 +1,7 @@
 package ctrl
 
 import (
-	. "github.com/mickael-kerjean/filestash/server/common"
+	. "github.com/icoma89/filestash/server/common"
 	"fmt"
 	"io"
 	"text/template"

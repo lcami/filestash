@@ -1,7 +1,7 @@
 package ssl
 
 import (
-	. "github.com/mickael-kerjean/filestash/server/common"
+	. "github.com/icoma89/filestash/server/common"
 	"path/filepath"
 	"os"
 )

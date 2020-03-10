@@ -3,7 +3,7 @@ package backend
 import (
 	"crypto/tls"
 	"fmt"
-	. "github.com/mickael-kerjean/filestash/server/common"
+	. "github.com/icoma89/filestash/server/common"
 	"github.com/secsy/goftp"
 	"io"
 	"os"
