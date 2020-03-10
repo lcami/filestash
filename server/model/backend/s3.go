@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"strings"
 	"fmt"
+	"encoding/base64"
 )
 
 var S3Cache AppCache
@@ -37,14 +38,28 @@ func (s S3Backend) Init(params map[string]string, app *App) (IBackend, error) {
 	if params["region"] == "" {
 		params["region"] = "us-east-2"
 	}
+
+	key, secret := "", "."
+
+	if RGW_ENABLED {
+		jsonPayload := "{\"RGW_TOKEN\": {\"version\": 1,\"type\": \"ldap\",\"id\": \"" + params["email"] + "\",\"key\": \"" + params["password"] + "\"}}"
+		key = base64.StdEncoding.EncodeToString([]byte(jsonPayload))
+		secret = "."
+	} else {
+		key = params["access_key_id"]
+		secret = params["secret_access_key"]
+	}
+
 	config := &aws.Config{
-		Credentials:      credentials.NewStaticCredentials(params["access_key_id"], params["secret_access_key"], ""),
+		Credentials:      credentials.NewStaticCredentials(key, secret, ""),
 		S3ForcePathStyle: aws.Bool(true),
 		Region:           aws.String(params["region"]),
 	}
+
 	if params["endpoint"] != "" {
 		config.Endpoint = aws.String(params["endpoint"])
 	}
+
 	backend := &S3Backend{
 		config: config,
 		params: params,
@@ -54,54 +69,106 @@ func (s S3Backend) Init(params map[string]string, app *App) (IBackend, error) {
 }
 
 func (s S3Backend) LoginForm() Form {
-	return Form{
-		Elmnts: []FormElement{
-			FormElement{
-				Name:        "type",
-				Type:        "hidden",
-				Value:       "s3",
+	if RGW_ENABLED {
+		return Form{
+			Elmnts: []FormElement{
+				FormElement{
+					Name:  "type",
+					Type:  "hidden",
+					Value: "s3",
+				},
+				FormElement{
+					Name:        "email",
+					Type:        "text",
+					Placeholder: "Email Address",
+				},
+				FormElement{
+					Name:        "password",
+					Type:        "password",
+					Placeholder: "Password",
+				},
+				FormElement{
+					Name:        "advanced",
+					Type:        "enable",
+					Placeholder: "Advanced",
+					Target:      []string{"s3_path", "s3_encryption_key", "s3_region", "s3_endpoint"},
+				},
+				FormElement{
+					Id:          "s3_path",
+					Name:        "path",
+					Type:        "text",
+					Placeholder: "Path",
+				},
+				FormElement{
+					Id:          "s3_encryption_key",
+					Name:        "encryption_key",
+					Type:        "text",
+					Placeholder: "Encryption Key",
+				},
+				FormElement{
+					Id:          "s3_region",
+					Name:        "region",
+					Type:        "text",
+					Placeholder: "Region",
+				},
+				FormElement{
+					Id:          "s3_endpoint",
+					Name:        "endpoint",
+					Type:        "text",
+					Placeholder: "Endpoint",
+				},
 			},
-			FormElement{
-				Name:        "access_key_id",
-				Type:        "text",
-				Placeholder: "Access Key ID*",
+		}
+	} else {
+		return Form{
+			Elmnts: []FormElement{
+				FormElement{
+					Name:        "type",
+					Type:        "hidden",
+					Value:       "s3",
+				},
+				FormElement{
+					Name:        "access_key_id",
+					Type:        "text",
+					Placeholder: "Access Key ID*",
+				},
+				FormElement{
+					Name:        "secret_access_key",
+					Type:        "text",
+					Placeholder: "Secret Access Key*",
+				},
+				FormElement{
+					Name:        "advanced",
+					Type:        "enable",
+					Placeholder: "Advanced",
+					Target:      []string{"s3_path", "s3_encryption_key", "s3_region", "s3_endpoint"},
+				},
+				FormElement{
+					Id:          "s3_path",
+					Name:        "path",
+					Type:        "text",
+					Placeholder: "Path",
+				},
+				FormElement{
+					Id:          "s3_encryption_key",
+					Name:        "encryption_key",
+					Type:        "text",
+					Placeholder: "Encryption Key",
+				},
+				FormElement{
+					Id:          "s3_region",
+					Name:        "region",
+					Type:        "text",
+					Placeholder: "Region",
+				},
+				FormElement{
+					Id:          "s3_endpoint",
+					Name:        "endpoint",
+					Type:        "text",
+					Placeholder: "Endpoint",
+				},
 			},
-			FormElement{
-				Name:        "secret_access_key",
-				Type:        "text",
-				Placeholder: "Secret Access Key*",
-			},
-			FormElement{
-				Name:        "advanced",
-				Type:        "enable",
-				Placeholder: "Advanced",
-				Target:      []string{"s3_path", "s3_encryption_key", "s3_region", "s3_endpoint"},
-			},
-			FormElement{
-				Id:          "s3_path",
-				Name:        "path",
-				Type:        "text",
-				Placeholder: "Path",
-			},
-			FormElement{
-				Id:          "s3_encryption_key",
-				Name:        "encryption_key",
-				Type:        "text",
-				Placeholder: "Encryption Key",
-			},
-			FormElement{
-				Id:          "s3_region",
-				Name:        "region",
-				Type:        "text",
-				Placeholder: "Region",
-			},
-			FormElement{
-				Id:          "s3_endpoint",
-				Name:        "endpoint",
-				Type:        "text",
-				Placeholder: "Endpoint",
-			},
-		},
+		}
 	}
 }
 

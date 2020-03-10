@@ -21,6 +21,7 @@ const (
 	FILE_INDEX = "./data/public/index.html"
 	FILE_ASSETS = "./data/public/"
 	URL_SETUP = "/admin/setup"
+	RGW_ENABLED = true
 )
 
 func init(){	
