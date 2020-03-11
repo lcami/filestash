@@ -111,18 +111,6 @@ func ServeFile(res http.ResponseWriter, req *http.Request, filePath string) {
 	}
 
 	head := res.Header()
-	if (strings.Contains(filePath, "svg")) {
-		head.Set("Content-Type", "image/svg+xml")
-	} else if (strings.Contains(filePath, "png")) {
-		head.Set("Content-Type", "image/png")
-	} else if (strings.Contains(filePath, "woff2")) {
-		head.Set("Content-Type", "font/woff2")
-	} else if (strings.Contains(filePath, "js")) {
-		head.Set("Content-Type", "application/javascript")
-	} else if (strings.Contains(filePath, "json")) {
-		head.Set("Content-Type", "application/json")
-	}
-
 	acceptEncoding := req.Header.Get("Accept-Encoding")
 
 	if strings.Contains(acceptEncoding, "br") {

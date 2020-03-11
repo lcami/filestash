@@ -8,7 +8,14 @@ import (
 	"strings"
 )
 
-var MimeTypes map[string]string = map[string]string{ "txt": "text/plain" }
+var MimeTypes map[string]string = map[string]string{
+	"txt": "text/plain",
+	"svg": "image/svg+xml",
+	"png": "image/png",
+	"woff2": "font/woff2",
+	"js": "application/javascript",
+	"json": "application/json",
+}
 
 func init() {
 	path := filepath.Join(GetCurrentDir(), CONFIG_PATH + "mime.json")
