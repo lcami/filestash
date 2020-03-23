@@ -2,8 +2,6 @@ FROM debian:stable-slim
 
 ENV DEBIAN_FRONTEND noninteractive
 
-COPY dist /app
-
 RUN apt-get update > /dev/null && \
     apt-get purge -y --auto-remove gnupg && \
     #################
@@ -41,12 +39,15 @@ RUN apt-get update > /dev/null && \
     #################
     # Finalise the image
     useradd filestash && \
-    chown -R filestash:filestash /app/ && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/*
 
+COPY dist /app
+RUN chown -R filestash:filestash /app/
+
 USER filestash
-RUN timeout 1 /app/filestash | grep -q start
+
+RUN timeout 1 /app/filestash | grep -q start || timeout 1 /app/filestash | grep -q start || timeout 1 /app/filestash | grep -q start || timeout 1 /app/filestash | grep -q start
 
 EXPOSE 8334
 VOLUME ["/app/data/state/"]
